@@ -4,6 +4,8 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+SECRET_KEY = 'django-insecure-9r@7%-example-secret-key-12345)abc'
 ROOT_URLCONF = 'pdf_speech.urls'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
