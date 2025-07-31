@@ -17,6 +17,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'tailwind',
+    'theme',  # <- name of your custom Tailwind app (we’ll create it next)
+    'django_browser_reload',  # optional but useful for live-reloading
 
     'pdf_app',  # your custom app
 ]
@@ -29,6 +32,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django_browser_reload.middleware.BrowserReloadMiddleware',
 ]
 
 TEMPLATES = [
@@ -46,6 +50,7 @@ TEMPLATES = [
         },
     },
 ]
-STATIC_URL = '/static/'
+STATIC_URL = '/static/'   
 STATIC_ROOT = BASE_DIR / 'staticfiles'
-
+INTERNAL_IPS = ["127.0.0.1"]
+TAILWIND_APP_NAME = 'theme'
