@@ -18,7 +18,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'tailwind',
-    'theme',  # <- name of your custom Tailwind app (we’ll create it next)
     'django_browser_reload',  # optional but useful for live-reloading
 
     'pdf_app',  # your custom app
