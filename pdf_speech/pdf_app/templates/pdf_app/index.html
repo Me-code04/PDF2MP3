@@ -1,22 +1,36 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+{% load static %}
+{% load crispy_forms_tags %}
+{% load i18n %}
 <head>
+    <meta charset="UTF-8">
     <title>PDF to Speech</title>
+    <link href="{% static 'css/dist/styles.css' %}" rel="stylesheet">
 </head>
-<body>
-<h1>Upload PDF and Listen</h1>
-<form method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Convert</button>
-</form>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center p-4">
 
-{% if audio_file %}
-    <h2>Listen:</h2>
-    <audio controls>
-        <source src="{{ audio_file }}" type="audio/mp3">
-        Your browser does not support the audio element.
-    </audio>
-{% endif %}
+    <div class="bg-white shadow-xl rounded-2xl p-8 w-full max-w-xl">
+        <h1 class="text-3xl font-bold text-center text-blue-600 mb-6">Upload PDF and Listen</h1>
+        
+        <form method="post" enctype="multipart/form-data" class="space-y-4">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="w-full bg-green-600 text-white py-2 px-4 rounded hover:bg-green-700 transition">
+                Convert
+            </button>
+        </form>
+
+        {% if audio_file %}
+            <div class="mt-6">
+                <h2 class="text-xl font-semibold text-gray-800 mb-2">Listen:</h2>
+                <audio controls class="w-full">
+                    <source src="{{ audio_file }}" type="audio/mp3">
+                    Your browser does not support the audio element.
+                </audio>
+            </div>
+        {% endif %}
+    </div>
+
 </body>
 </html>
