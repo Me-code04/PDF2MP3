@@ -18,12 +18,13 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'tailwind',
-    'theme',  # your Tailwind theme app
     'django.contrib.sites',
     'django_browser_reload',  # optional but useful for live-reloading
 
     'pdf_app',  # your custom app
 ]
+
+TAILWIND_APP_NAME = 'theme'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
