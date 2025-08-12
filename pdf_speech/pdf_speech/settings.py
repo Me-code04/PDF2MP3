@@ -59,7 +59,6 @@ INTERNAL_IPS = ["127.0.0.1"]
 TAILWIND_APP_NAME = 'theme'
 
 urlpatterns = [
-    path("admin/", admin.site.urls),
     path("__reload__/", include("django_browser_reload.urls")), 
     path("", include("pdf_app.urls")),
 ]
