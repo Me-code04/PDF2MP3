@@ -19,6 +19,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'tailwind',
+    'crispy_forms',
+    'crispy_tailwind', # for Tailwind CSS integration
     'django.contrib.sites',
     'django_browser_reload',  # optional but useful for live-reloading
 
@@ -62,3 +64,6 @@ urlpatterns = [
     path("__reload__/", include("django_browser_reload.urls")), 
     path("", include("pdf_app.urls")),
 ]
+
+CRISPY_ALLOWED_TEMPLATE_PACKS = "tailwind"
+CRISPY_TEMPLATE_PACK = "tailwind"
