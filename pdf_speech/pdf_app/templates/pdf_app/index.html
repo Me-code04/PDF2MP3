@@ -1,61 +1,54 @@
-<!DOCTYPE html>
-<html lang="en">
 {% load static %}
 {% load i18n %}
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>PDF to Speech</title>
-  <link href="{% static 'css/dist/styles.css' %}" rel="stylesheet" />
+    <meta charset="UTF-8">
+    <title>PDF to Speech</title>
+    <link href="{% static 'css/dist/styles.css' %}" rel="stylesheet">
 </head>
-<body class="min-h-screen bg-base-200 text-base-content flex flex-col items-center justify-center p-4">
+<body class="min-h-screen bg-base-200 flex items-center justify-center p-6">
+    <div class="max-w-xl w-full bg-white shadow-xl rounded-lg p-8 space-y-6">
+        <h1 class="text-3xl font-bold text-center flex items-center justify-center gap-2">
+            <span>🎧</span> PDF to Speech
+        </h1>
 
-  <div class="w-full max-w-xl bg-base-100 shadow-xl rounded-xl p-8 space-y-6">
-    <h1 class="text-3xl font-bold text-center flex items-center justify-center gap-2">
-      <span>🎧 PDF to Speech</span>
-    </h1>
+        <form method="post" enctype="multipart/form-data" class="space-y-4">
+            {% csrf_token %}
+            
+            <div class="form-control">
+                <label class="label font-semibold">Select PDF:</label>
+                {{ form.pdf_file }}
+            </div>
 
-    <form method="post" enctype="multipart/form-data" class="space-y-4">
-      {% csrf_token %}
+            <div class="form-control">
+                <label class="label font-semibold">Language:</label>
+                {{ form.language }}
+            </div>
 
-      <div class="form-control">
-        <label class="label font-semibold">Select PDF:</label>
-        <input type="file" name="pdf_file" class="file-input file-input-bordered w-full" required />
-      </div>
+            <div class="flex gap-4">
+                <div class="form-control w-full">
+                    <label class="label font-semibold">Start Page:</label>
+                    {{ form.start_page }}
+                </div>
+                <div class="form-control w-full">
+                    <label class="label font-semibold">End Page:</label>
+                    {{ form.end_page }}
+                </div>
+            </div>
 
-      <div class="form-control">
-        <label class="label font-semibold">Language:</label>
-        <select name="language" class="select select-bordered w-full">
-          <option value="en">English</option>
-          <option value="fr">French</option>
-          <!-- Add more options if needed -->
-        </select>
-      </div>
+            <button class="btn btn-primary w-full">Convert</button>
+        </form>
 
-      <div class="form-control grid grid-cols-2 gap-4">
+        {% if audio_file %}
         <div>
-          <label class="label font-semibold">Start Page:</label>
-          <input type="number" name="start_page" min="1" class="input input-bordered w-full" />
+            <h2 class="text-xl font-semibold mt-4">Listen:</h2>
+            <audio controls class="mt-2 w-full">
+                <source src="{{ audio_file }}" type="audio/mp3">
+                Your browser does not support the audio element.
+            </audio>
         </div>
-        <div>
-          <label class="label font-semibold">End Page:</label>
-          <input type="number" name="end_page" min="1" class="input input-bordered w-full" />
-        </div>
-      </div>
-
-      <button type="submit" class="btn btn-primary w-full">Convert</button>
-    </form>
-
-    {% if audio_file %}
-      <div class="mt-6">
-        <h2 class="text-xl font-bold">🎧 Listen to Your Audio:</h2>
-        <audio controls class="w-full mt-2">
-          <source src="{{ audio_file }}" type="audio/mp3" />
-          Your browser does not support the audio element.
-        </audio>
-      </div>
-    {% endif %}
-  </div>
-
+        {% endif %}
+    </div>
 </body>
 </html>
