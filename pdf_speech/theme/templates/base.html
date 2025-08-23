@@ -1,26 +1,93 @@
-{% load static tailwind_tags %}
+{% load static %}
+
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <title>Django Tailwind</title>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    {% tailwind_css %}
-</head>
+<html lang="en" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PDF to Speech</title>
+    <link href="{% static 'css/dist/styles.css' %}" rel="stylesheet" />
+    <script defer>
+      // Optional: dark/light toggle logic
+      const toggleTheme = () => {
+        const html = document.documentElement;
+        html.dataset.theme = html.dataset.theme === "light" ? "dark" : "light";
+      };
+    </script>
+  </head>
+  <body class="min-h-screen bg-base-200 text-base-content flex items-center justify-center p-6">
+    <div class="w-full max-w-2xl bg-base-100 p-8 rounded-box shadow-lg">
+      <div class="flex justify-between items-center mb-6">
+        <h1 class="text-3xl font-bold">
+          🎧 PDF to Speech
+        </h1>
+        <button onclick="toggleTheme()" class="btn btn-sm btn-outline">🌓 Toggle</button>
+      </div>
 
-<body class="bg-gray-50 text-black font-serif leading-normal tracking-normal">
+      <form method="POST" enctype="multipart/form-data" class="space-y-4">
+        {% csrf_token %}
 
-    <div class="toast toast-top toast-end">
-        <div class="alert alert-info">
-            <span>Hello from daisyUi 👋</span>
+        <!-- File Upload -->
+        <div class="form-control">
+          <label class="label">
+            <span class="label-text font-semibold">Select PDF</span>
+          </label>
+          <input
+            type="file"
+            name="pdf_file"
+            accept=".pdf"
+            class="file-input file-input-bordered w-full"
+            required
+          />
         </div>
-    </div>
 
-<div class="container mx-auto">
-    <section class="flex items-center justify-center h-screen">
-        <h1 class="text-5xl">Django + Tailwind = ❤️</h1>
-    </section>
-</div>
-</body>
+        <!-- Language Dropdown -->
+        <div class="form-control">
+          <label class="label">
+            <span class="label-text font-semibold">Language</span>
+          </label>
+          <select name="language" class="select select-bordered w-full">
+            <option value="en">English</option>
+            <option value="fr">French</option>
+          </select>
+        </div>
+
+        <!-- Page Range -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="form-control">
+            <label class="label">
+              <span class="label-text font-semibold">Start Page</span>
+            </label>
+            <input
+              type="number"
+              name="start_page"
+              min="1"
+              class="input input-bordered w-full"
+              required
+            />
+          </div>
+
+          <div class="form-control">
+            <label class="label">
+              <span class="label-text font-semibold">End Page</span>
+            </label>
+            <input
+              type="number"
+              name="end_page"
+              min="1"
+              class="input input-bordered w-full"
+              required
+            />
+          </div>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="pt-4">
+          <button type="submit" class="btn btn-primary w-full">
+            🔊 Convert to Speech
+          </button>
+        </div>
+      </form>
+    </div>
+  </body>
 </html>
