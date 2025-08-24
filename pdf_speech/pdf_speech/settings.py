@@ -1,5 +1,5 @@
+# pdf_speech/pdf_speech/settings.py
 from pathlib import Path
-from django.urls import path, include
 
 DEBUG = True
 ALLOWED_HOSTS = []
@@ -8,8 +8,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = 'django-insecure-9r@7%-example-secret-key-12345)abc'
 ROOT_URLCONF = 'pdf_speech.urls'
-MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -18,16 +16,15 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'tailwind',
+
+    # optional extras you added
     'crispy_forms',
-    'crispy_tailwind', # for Tailwind CSS integration
+    'crispy_tailwind',         # make sure it's installed, or remove it
     'django.contrib.sites',
-    'django_browser_reload',  # optional but useful for live-reloading
+    'django_browser_reload',   # optional live reload
 
-    'pdf_app',  # your custom app
+    'pdf_app',
 ]
-
-TAILWIND_APP_NAME = 'theme'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -43,7 +40,7 @@ MIDDLEWARE = [
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [],  # app templates are discovered via APP_DIRS=True
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -55,15 +52,19 @@ TEMPLATES = [
         },
     },
 ]
-STATIC_URL = '/static/'   
-STATIC_ROOT = BASE_DIR / 'staticfiles'
-INTERNAL_IPS = ["127.0.0.1"]
-TAILWIND_APP_NAME = 'theme'
 
-urlpatterns = [
-    path("__reload__/", include("django_browser_reload.urls")), 
-    path("", include("pdf_app.urls")),
+# ---- STATIC & MEDIA ----
+STATIC_URL = "/static/"
+# Tell Django where your compiled Tailwind file lives:
+STATICFILES_DIRS = [
+    BASE_DIR / "theme" / "static",   # contains css/dist/styles.css
 ]
+STATIC_ROOT = BASE_DIR / "staticfiles"  # for collectstatic (prod)
+
+MEDIA_URL = "/media/"
+MEDIA_ROOT = BASE_DIR / "media"
+
+INTERNAL_IPS = ["127.0.0.1"]
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "tailwind"
 CRISPY_TEMPLATE_PACK = "tailwind"

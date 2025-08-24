@@ -1,11 +1,10 @@
-@import "tailwindcss";
-@plugin "daisyui";
+/* Tailwind v3 syntax */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-/**
-  * A catch-all path to Django template files, JavaScript, and Python files
-  * that contain Tailwind CSS classes and will be scanned by Tailwind to generate the final CSS file.
-  *
-  * If your final CSS file is not being updated after code changes, you may want to broaden or narrow
-  * the scope of this path.
-  */
-@source "../../../**/*.{html,py,js}";
+/* add your custom components/utilities here if you want
+@layer components {
+  .btn-primary-soft { @apply btn btn-primary; }
+}
+*/
