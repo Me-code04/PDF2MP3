@@ -1,0 +1,24 @@
+services:
+  - type: web
+    name: pdf2mp3
+    env: python
+    plan: free
+    buildCommand: |
+      pip install -r requirements.txt
+      python pdf_speech/manage.py collectstatic --noinput
+      cd pdf_speech/theme/static_src && yarn install --frozen-lockfile || yarn install
+      yarn --cwd pdf_speech/theme/static_src build
+    startCommand: gunicorn pdf_speech.wsgi:application --bind 0.0.0.0:$PORT
+    envVars:
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DEBUG
+        value: "False"
+      - key: ALLOWED_HOSTS
+        value: "*"
+      - key: MEDIA_ROOT
+        value: "/var/media"
+    disks:
+      - name: media
+        mountPath: /var/media
+        sizeGB: 1
