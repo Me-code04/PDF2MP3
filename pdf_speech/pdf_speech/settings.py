@@ -1,70 +1,77 @@
-# pdf_speech/pdf_speech/settings.py
+import os
 from pathlib import Path
-
-DEBUG = True
-ALLOWED_HOSTS = []
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = 'django-insecure-9r@7%-example-secret-key-12345)abc'
-ROOT_URLCONF = 'pdf_speech.urls'
+# read from env, with sensible defaults
+DEBUG = os.environ.get("DEBUG", "False").lower() == "true"
+SECRET_KEY = os.environ.get("SECRET_KEY", "dev-insecure-key")  # override on Render!
+ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "*").split(",")
 
 INSTALLED_APPS = [
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-
-    # optional extras you added
-    'crispy_forms',
-    'crispy_tailwind',         # make sure it's installed, or remove it
-    'django.contrib.sites',
-    'django_browser_reload',   # optional live reload
-
-    'pdf_app',
+    "django.contrib.admin",
+    "django.contrib.auth",
+    "django.contrib.contenttypes",
+    "django.contrib.sessions",
+    "django.contrib.messages",
+    "django.contrib.staticfiles",
+    # remove 'tailwind' (django-tailwind) unless you actually use that package
+    "crispy_forms",
+    "crispy_tailwind",
+    # remove in prod if you don’t need live reload
+    # "django_browser_reload",
+    "pdf_app",
 ]
 
 MIDDLEWARE = [
-    'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'django_browser_reload.middleware.BrowserReloadMiddleware',
+    "django.middleware.security.SecurityMiddleware",
+    # WhiteNoise must be right after SecurityMiddleware
+    "whitenoise.middleware.WhiteNoiseMiddleware",
+    "django.contrib.sessions.middleware.SessionMiddleware",
+    "django.middleware.common.CommonMiddleware",
+    "django.middleware.csrf.CsrfViewMiddleware",
+    "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "django.contrib.messages.middleware.MessageMiddleware",
+    "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    # remove in prod if not needed
+    # "django_browser_reload.middleware.BrowserReloadMiddleware",
 ]
+
+ROOT_URLCONF = "pdf_speech.urls"
 
 TEMPLATES = [
     {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],  # app templates are discovered via APP_DIRS=True
-        'APP_DIRS': True,
-        'OPTIONS': {
-            'context_processors': [
-                'django.template.context_processors.debug',
-                'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
+        "BACKEND": "django.template.backends.django.DjangoTemplates",
+        "DIRS": [],
+        "APP_DIRS": True,
+        "OPTIONS": {
+            "context_processors": [
+                "django.template.context_processors.debug",
+                "django.template.context_processors.request",
+                "django.contrib.auth.context_processors.auth",
+                "django.contrib.messages.context_processors.messages",
             ],
         },
     },
 ]
 
-# ---- STATIC & MEDIA ----
+WSGI_APPLICATION = "pdf_speech.wsgi.application"
+
+# Static files (built Tailwind CSS goes here)
 STATIC_URL = "/static/"
-# Tell Django where your compiled Tailwind file lives:
-STATICFILES_DIRS = [
-    BASE_DIR / "theme" / "static",   # contains css/dist/styles.css
-]
-STATIC_ROOT = BASE_DIR / "staticfiles"  # for collectstatic (prod)
+STATICFILES_DIRS = [BASE_DIR / "theme" / "static"]
+STATIC_ROOT = BASE_DIR / "staticfiles"
+# whitenoise compression + manifest (better caching)
+STORAGES = {
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+    }
+}
 
+# Media (MP3 output) – point to a mounted disk on Render
 MEDIA_URL = "/media/"
-MEDIA_ROOT = BASE_DIR / "media"
+MEDIA_ROOT = os.environ.get("MEDIA_ROOT", str(BASE_DIR / "media"))
 
-INTERNAL_IPS = ["127.0.0.1"]
-
+# Crispy
 CRISPY_ALLOWED_TEMPLATE_PACKS = "tailwind"
 CRISPY_TEMPLATE_PACK = "tailwind"
